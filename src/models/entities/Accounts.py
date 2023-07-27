@@ -11,8 +11,7 @@ class Accounts(db.Model):
     
     
 
-    def __init__(self, id_cuenta, nombre, correo, contrasena, id_cat_tipo_cuenta):
-        self.id_cuenta=id_cuenta
+    def __init__(self, nombre, correo, contrasena, id_cat_tipo_cuenta):
         self.nombre=nombre
         self.correo=correo
         self.contrasena=contrasena
