@@ -14,7 +14,7 @@ user=os.environ['PGSQL_USER']
 password=os.environ['PGSQL_PASSWORD']
 database=os.environ['PGSQL_DATABASE']
 
-DATEBASE_CONNECTION_URI= f'postgresql://{user}:{password}@{host}:5432/{database}'
+DATEBASE_CONNECTION_URI= f'postgresql://{user}:{password}@{host}:{port}/{database}'
 
 def get_connection():
     try:
