@@ -1,10 +1,15 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, redirect, url_for
+from werkzeug.security import generate_password_hash
 #entities
 from models.entities.Accounts import Accounts
 # Models
 from models.AccountsModel import AccountsModel
 #blueprint
 account = Blueprint('account', __name__,)
+
+@account.route('/')
+def index():
+    return redirect(url_for('login'))
 
 @account.route('/registry', methods=['POST'])
 def registryAccount():
@@ -13,10 +18,31 @@ def registryAccount():
         email = request.json['correo']
         password = request.json['contrasena']
         idCatAccountType = request.json['id_cat_tipo_cuenta']      
-
-        account = Accounts(name,email, password, idCatAccountType)
+        hash=generate_password_hash(str(password))
+        account = Accounts(name,email, hash, idCatAccountType)
         AccountsModel.registry(account)
        
         return {"status":200}
+    except Exception as ex:
+        return jsonify({'message': str(ex)}),500 
+    
+    
+@account.route('/login', methods=['GET', 'POST'])
+def login():
+    try:
+       if request.method=='POST':
+           email = request.json['correo']
+           password = request.json['contrasena']
+           data_account = Accounts("", email, password, 0)
+           logged_account= AccountsModel.login(data_account)
+           if logged_account != None:
+               if logged_account.contrasena:
+                  return {"Account logged":200} 
+               else:
+                   return {"Invalid password":500}
+           else:    
+            return {"Account not found":404}
+       else:        
+            return {"status":200}
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
