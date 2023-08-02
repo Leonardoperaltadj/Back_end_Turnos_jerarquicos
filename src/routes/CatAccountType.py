@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 #entities
-from models.entities.CatAccountTypes import CatAccountTypes
+from models.entities.catAccountTypes import CatAccountTypes
 # Models
-from models.CatAccountTypesModel import CatAccountTypesModel
+from models.catAccountTypesModel import CatAccountTypesModel
 #blueprint
 CatAccountType = Blueprint('accountType', __name__,)
 
