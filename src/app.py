@@ -6,7 +6,7 @@ from config import config
 from database.db import db
 
 # Routes
-from routes import Accounts, CatAccountType
+from routes import Accounts, CatAccountType, CatTurns
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =  DATEBASE_CONNECTION_URI
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Blueprints
     app.register_blueprint(Accounts.account, url_prefix='/api/account')
     app.register_blueprint(CatAccountType.CatAccountType, url_prefix='/api/accountType')
-
+    app.register_blueprint(CatTurns.CatTurn, url_prefix='/api/catTurns')
     # Error handlers
     app.register_error_handler(404, page_not_found)
     app.run()

@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify, request, redirect, url_for
 from werkzeug.security import generate_password_hash
-#entities
+#entties
 from models.entities.Accounts import Accounts
+from models.entities.Turns import Turns
 # Models
 from models.AccountsModel import AccountsModel
+from models.TurnsModel import TurnsModel
+from models.CatTurnsModel import CatTurnsModel
 #blueprint
 account = Blueprint('account', __name__,)
 
@@ -20,9 +23,11 @@ def registryAccount():
         idCatAccountType = request.json['id_cat_tipo_cuenta']      
         hash=generate_password_hash(str(password))
         account = Accounts(name,email, hash, idCatAccountType)
-        AccountsModel.registry(account)
-       
-        return {"status":200}
+        _account=AccountsModel.registry(account)
+        classification_turns = CatTurnsModel.classification_turns(idCatAccountType)
+        turns= Turns(_account.id_cuenta, classification_turns)
+        _turn= TurnsModel.registry(turns)
+        return {"status":"account registered successfully"}
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
     
