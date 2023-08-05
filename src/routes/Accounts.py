@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, redirect, url_for
 from werkzeug.security import generate_password_hash
 from flask_login import login_user, current_user
 from app import login_manager_app
+from cryptography.fernet import Fernet
 import base64
 #entties
 from models.entities.Accounts import Accounts
@@ -12,6 +13,8 @@ from models.TurnsModel import TurnsModel
 from models.CatTurnsModel import CatTurnsModel
 #blueprint
 account = Blueprint('account', __name__,)
+key= Fernet.generate_key()
+object_encrypt=Fernet(key)
 
 @login_manager_app.user_loader
 def load_user(id):
@@ -54,7 +57,7 @@ def registryAccount():
         password = request.json['contrasena']
         idCatAccountType = request.json['id_cat_tipo_cuenta']      
         hash=generate_password_hash(str(password))
-        account = Accounts(name,email, hash, idCatAccountType)
+        account = Accounts(None,name,email, hash, idCatAccountType)
         _account=AccountsModel.registry(account)
         classification_turns = CatTurnsModel.classification_turns(idCatAccountType)
         turns= Turns(_account.id_cuenta, classification_turns)
@@ -70,13 +73,14 @@ def login():
        if request.method=='POST':
            email = request.json['correo']
            password = request.json['contrasena']
-           data_account = Accounts("", email, password, 0)
+           data_account = Accounts( None,"", email, password, 0)
            logged_account= AccountsModel.login(data_account)
            if logged_account != None:
                if logged_account.contrasena:
                   login_user(logged_account, remember=True)
-                  print(current_user.contrasena)
-                  return {"Account logged":200}#, redirect(url_for('account.turn'))
+                  id= str(logged_account.id_cuenta)
+                  text_encrypt=object_encrypt.encrypt(str.encode(id)) 
+                  return jsonify({"Account logged":200, "id_account":text_encrypt.decode('utf-8')})#, redirect(url_for('account.turn'))
                else:
                    return {"Invalid password":500}
            else:    
@@ -86,16 +90,16 @@ def login():
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
     
-@account.route('/turn', methods=['GET'])
-def turn():
+@account.route('/turn/<id>', methods=['GET'])
+def turn(id):
     try:
-        data_account=[]
-        print(1)
-        account= Accounts(current_user.nombre, current_user.correo,current_user.contrasena,current_user.id_cat_tipo_cuenta)
-        print(1)
-        _account=data_account.append(account.to_json())
-        print(1)
-            
-        return jsonify(_account)
+        data_turn=[]
+        id_convert=str.encode(id)
+        decryption_bytes=object_encrypt.decrypt(id_convert)
+        decryption = decryption_bytes.decode()
+        id=int(decryption)
+        data=AccountsModel.get_account(id)
+        data_turn.append(data)
+        return jsonify(data_turn)
     except Exception as ex:
         return jsonify({'message': str(ex)}),500     

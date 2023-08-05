@@ -13,7 +13,8 @@ class Accounts(db.Model, UserMixin):
     
     
 
-    def __init__(self, nombre=None, correo=None, contrasena=None, id_cat_tipo_cuenta=None):
+    def __init__(self, id_cuenta=None,nombre=None, correo=None, contrasena=None, id_cat_tipo_cuenta=None):
+        self.id_cuenta=id_cuenta
         self.nombre=nombre
         self.correo=correo
         self.contrasena=contrasena
