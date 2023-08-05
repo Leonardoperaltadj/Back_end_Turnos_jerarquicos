@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from database.db import DATEBASE_CONNECTION_URI
 from config import config
 from database.db import db
+from flask_login import LoginManager
 
 # Routes
 from routes import Accounts, CatAccountType, CatTurns
@@ -12,10 +13,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =  DATEBASE_CONNECTION_URI
 #db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+login_manager_app=LoginManager(app)
 
 with app.app_context():
     db.init_app(app)
     db.create_all()
+    
 
 CORS(app, resources={"*": {"origins": "http://localhost:5000"}})
 

@@ -25,4 +25,19 @@ class AccountsModel():
             else:
                 return None        
         except Exception as ex:   
-            raise Exception(ex)     
+            raise Exception(ex)   
+        
+    @classmethod    
+    def get_by_id(self, id):    
+        try: 
+            id_account = Accounts.query.get_or_404(id) 
+            account=None
+            if id_account != None:
+                account=Accounts(id_account.nombre, id_account.correo, id_account.contrasena, id_account.id_cat_tipo_cuenta)
+                #account=account.to_json()
+
+            return account
+        except Exception as ex:   
+            raise Exception(ex)   
+        
+               
