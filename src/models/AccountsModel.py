@@ -46,9 +46,14 @@ class AccountsModel():
             id_account = Accounts.query.get_or_404(id) 
             if id_account != None:
                 account=Accounts(id_account.id_cuenta,id_account.nombre, id_account.correo, id_account.contrasena, id_account.id_cat_tipo_cuenta)
-                account_json=account.to_json()
-            return account_json
+                #account_json=account.to_json()
+            return account
         except Exception as ex:   
-            raise Exception(ex)        
+            raise Exception(ex)  
+        
+       
+        
+        
+              
         
                

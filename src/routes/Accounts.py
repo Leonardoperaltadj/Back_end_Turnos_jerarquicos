@@ -59,9 +59,6 @@ def registryAccount():
         hash=generate_password_hash(str(password))
         account = Accounts(None,name,email, hash, idCatAccountType)
         _account=AccountsModel.registry(account)
-        classification_turns = CatTurnsModel.classification_turns(idCatAccountType)
-        turns= Turns(_account.id_cuenta, classification_turns)
-        _turn= TurnsModel.registry(turns)
         return {"status":"account registered successfully"}
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
@@ -93,13 +90,17 @@ def login():
 @account.route('/turn/<id>', methods=['GET'])
 def turn(id):
     try:
-        data_turn=[]
+        
         id_convert=str.encode(id)
         decryption_bytes=object_encrypt.decrypt(id_convert)
         decryption = decryption_bytes.decode()
         id=int(decryption)
-        data=AccountsModel.get_account(id)
-        data_turn.append(data)
+        data_account=AccountsModel.get_account(id)
+        classification_turns = CatTurnsModel.classification_turns(data_account.id_cat_tipo_cuenta)
+        turns= Turns(data_account.id_cuenta, classification_turns)
+        _turn= TurnsModel.registry(turns)
+        #data_turn.append(data_account)
+        data_turn=TurnsModel.get_account_turn()
         return jsonify(data_turn)
     except Exception as ex:
         return jsonify({'message': str(ex)}),500     
