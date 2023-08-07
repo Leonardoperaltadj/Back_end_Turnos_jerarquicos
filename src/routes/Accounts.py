@@ -88,7 +88,7 @@ def login():
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
     
-@account.route('/turn/<id>', methods=['GET','POST'])
+@account.route('/turn/<id>', methods=['GET'])
 def turn(id):
     try:
         
@@ -102,11 +102,16 @@ def turn(id):
         turns= Turns(data_account.id_cuenta, classification_turns)
         _turn= TurnsModel.registry(turns)
         #data_turn.append(data_account)
-        if _turn != None:
-            data_turn=TurnsModel.get_account_turn()
-            return jsonify(data_turn)
+        if turn != None:
+            return jsonify({"Turnos registrado":200})  
         else:
-            data_turn=TurnsModel.get_account_turn()
-            return jsonify({"Turnos_duplicado":200},data_turn)
+            return jsonify({"Turnos duplicado":200})  
     except Exception as ex:
-        return jsonify({'message': str(ex)}),500     
+        return jsonify({'message': str(ex)}),500   
+    
+      
+@account.route('/listurn', methods=['GET'])   
+def list_turns():
+        data_turn=TurnsModel.get_account_turn()
+        return jsonify(data_turn)
+       
