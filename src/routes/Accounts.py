@@ -100,7 +100,10 @@ def turn(id):
         turns= Turns(data_account.id_cuenta, classification_turns)
         _turn= TurnsModel.registry(turns)
         #data_turn.append(data_account)
-        data_turn=TurnsModel.get_account_turn()
-        return jsonify(data_turn)
+        if _turn != None:
+            data_turn=TurnsModel.get_account_turn()
+            return jsonify(data_turn)
+        else:
+            return{"Turno duplicado!!":200}
     except Exception as ex:
         return jsonify({'message': str(ex)}),500     

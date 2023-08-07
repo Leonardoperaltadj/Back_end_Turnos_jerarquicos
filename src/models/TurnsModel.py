@@ -2,16 +2,20 @@ from database.db import db
 from .entities.Turns import Turns
 from models.AccountsModel import AccountsModel
 from models.CatTurnsModel import CatTurnsModel
-
 class TurnsModel():    
        
     @classmethod
     def registry(self, turn):
         try:
-            db.session.add(turn)
-            db.session.commit()
+           
+            if Turns.query.filter_by(id_cuenta=int(turn.id_cuenta)).first():
+                return None
+            else:
+           
+                db.session.add(turn)
+                db.session.commit()
             
-            return turn
+                return turn
             
         except Exception as ex:   
             raise Exception(ex) 
