@@ -75,9 +75,10 @@ def login():
            if logged_account != None:
                if logged_account.contrasena:
                   login_user(logged_account, remember=True)
-                  id= str(logged_account.id_cuenta)
-                  text_encrypt=object_encrypt.encrypt(str.encode(id)) 
-                  return jsonify({"Account logged":200, "id_account":text_encrypt.decode('utf-8')})#, redirect(url_for('account.turn'))
+                  #id= str(logged_account.id_cuenta)
+                  #text_encrypt=object_encrypt.encrypt(str.encode(id)) 
+                  id=int(logged_account.id_cuenta)
+                  return jsonify({"Account logged":200, "id_account":id})#text_encrypt.decode('utf-8')})#, redirect(url_for('account.turn'))
                else:
                    return {"Invalid password":500}
            else:    
@@ -87,14 +88,14 @@ def login():
     except Exception as ex:
         return jsonify({'message': str(ex)}),500 
     
-@account.route('/turn/<id>', methods=['GET'])
+@account.route('/turn/<id>', methods=['GET','POST'])
 def turn(id):
     try:
         
-        id_convert=str.encode(id)
-        decryption_bytes=object_encrypt.decrypt(id_convert)
-        decryption = decryption_bytes.decode()
-        id=int(decryption)
+        #id_convert=str.encode(id)
+        #decryption_bytes=object_encrypt.decrypt(id_convert)
+        #decryption = decryption_bytes.decode()
+        #id=int(decryption)
         data_account=AccountsModel.get_account(id)
         classification_turns = CatTurnsModel.classification_turns(data_account.id_cat_tipo_cuenta)
         turns= Turns(data_account.id_cuenta, classification_turns)

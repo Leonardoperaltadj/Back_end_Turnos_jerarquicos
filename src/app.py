@@ -38,3 +38,4 @@ if __name__ == '__main__':
     # Error handlers
     app.register_error_handler(404, page_not_found)
     app.run()
+    
