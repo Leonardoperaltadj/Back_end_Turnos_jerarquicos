@@ -37,14 +37,14 @@ class TurnsModel():
     @classmethod    
     def get_account_turn(self):    
         try: 
-            #results_turn=[]
+            results_turn=[]
             results_accounts=[]
             result_cat_turns=[]
             results_cat_type_account=[]
             turns=Turns.query.all()
             for turn in turns:
                 data_turn=Turns(turn.id_cuenta, turn.id_cat_turno)
-                #results_turn.append(data_turn.to_json())
+                results_turn.append(data_turn.to_json())
                 data_account=AccountsModel.get_account(turn.id_cuenta)
                 results_accounts.append(data_account.to_json())
                 print(data_account.id_cat_tipo_cuenta)
@@ -54,7 +54,7 @@ class TurnsModel():
                 result_cat_turns.append(data_cat_turns.to_json())
                 
                 
-            return results_accounts ,result_cat_turns, results_cat_type_account
+            return results_turn,results_accounts ,result_cat_turns, results_cat_type_account
         except Exception as ex:   
             raise Exception(ex)         
         
