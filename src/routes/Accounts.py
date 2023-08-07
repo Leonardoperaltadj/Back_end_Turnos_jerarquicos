@@ -96,6 +96,7 @@ def turn(id):
         #decryption_bytes=object_encrypt.decrypt(id_convert)
         #decryption = decryption_bytes.decode()
         #id=int(decryption)
+        
         data_account=AccountsModel.get_account(id)
         classification_turns = CatTurnsModel.classification_turns(data_account.id_cat_tipo_cuenta)
         turns= Turns(data_account.id_cuenta, classification_turns)
@@ -105,6 +106,7 @@ def turn(id):
             data_turn=TurnsModel.get_account_turn()
             return jsonify(data_turn)
         else:
-            return{"Turno duplicado!!":200}
+            data_turn=TurnsModel.get_account_turn()
+            return jsonify({"Turnos_duplicado":200},data_turn)
     except Exception as ex:
         return jsonify({'message': str(ex)}),500     
