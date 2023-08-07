@@ -54,7 +54,7 @@ class TurnsModel():
                 result_cat_turns.append(data_cat_turns.to_json())
                 
                 
-            return results_cat_type_account,results_accounts ,result_cat_turns
+            return results_accounts ,result_cat_turns, results_cat_type_account
         except Exception as ex:   
             raise Exception(ex)         
         
