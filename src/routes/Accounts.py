@@ -102,7 +102,7 @@ def turn(id):
         turns= Turns(data_account.id_cuenta, classification_turns)
         _turn= TurnsModel.registry(turns)
         #data_turn.append(data_account)
-        if turn != None:
+        if _turn != None:
             return jsonify({"Turnos registrado":200})  
         else:
             return jsonify({"Turnos duplicado":200})  
